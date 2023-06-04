@@ -18,10 +18,13 @@
 ### 前端优化
 
 + 类百度效果，通过监听表单输入来改变html元素比例
+
   ![20230604112841](https://cdn.jsdelivr.net/gh/Thomas333333/MyPostImage/Images/20230604112841.png)
+
   <center>图1-输入前</center>
 
   ![20230604112916](https://cdn.jsdelivr.net/gh/Thomas333333/MyPostImage/Images/20230604112916.png)
+  
   <center>图2-输入后</center>
 + 
 
