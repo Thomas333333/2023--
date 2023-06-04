@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>机器问答</title>
+	<link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<!--    <h1>来自模板的内容</h1>
+    <p>name : {{name}}</p>
+    <p>message : {{message}}</p>  -->
+
+<table width="800" height="70" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
+  <thead>
+    <tr>
+      <td width="14%" align="center" bgcolor="#FFFFFF"><img src="../static/chat.jpg" width="70" height="74"></td>
+      <td width="86%" align="center" bgcolor="#FFFFFF"><h2>       机器问答<h2>   </td>
+    </tr>
+  </thead>
+</table>
+<br>
+<div id="app">
+<table width="800" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#FFFFFF" bordercolorlight="#666666" bordercolordark="#FFFFFF" id="comment">
+  <tr>
+	<td width="14%" height="27" align="center" bgcolor="#E5BB93">人-机</td>
+	<td width="86%" align="center" bgcolor="#E5BB93">问答内容</td>
+  </tr>
+</table>
+<form name="form1" method="post" action="">    
+  <table width="800" height="122" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="100" height="14">&nbsp;</td>
+      <td width="700">&nbsp;</td>
+    </tr>
+    <tr hidden="true">
+      <td height="27" align="center">评 论 人：</td>
+      <td>
+        <input name="person" type="text" id="person" size="40">
+
+      </td>
+    </tr>
+    <tr>
+      <td align="center">提问内容：</td>
+      <td><textarea name="content" cols="80" rows="6" id="content"></textarea></td>
+      <td><button @click.prevent="answerQuestion" type="submit" width="20">提交</button></td>
+    </tr>
+  </table>
+  </form>
+</div>
+</body>
+<script src="../static/vue.min.js"></script>
+<script src="../static/axios.min.js"></script>
+<script type="text/javascript">
+  var vm = new Vue({
+    el:'#app',
+    data:{
+      content:"",  //提问内容
+      answers:"",  //答案
+      results:[]  //搜索结果
+    },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+    },
+    methods:{
+      getanswer(){
+        var content = this.content;
+        return axios.request({
+            method: "POST",
+            url:"http://localhost:8000/getanswer/",
+            data:{content:this.content}
+        })
+      },
+	async sygetanswer(){
+		let response=await this.getanswer()
+		this.answers=response.data
+	},
+	addQuestion() {
+		this.content=form1.content.value
+		console.log(this.content);
+		//创建TextNode节点
+		//var person = document.createTextNode(form1.person.value);
+		var person = document.createElement("img");
+		person.src="../static/question.png"
+		var content = document.createTextNode(form1.content.value);	
+		//创建td类型的Element节点
+		var td_person = document.createElement("td"); 
+		td_person.align="center"
+		td_person.height="27"
+		var td_content = document.createElement("td");	
+		var tr = document.createElement("tr"); //创建一个tr类型的Element节点
+		var tbody = document.createElement("tbody"); //创建一个tbody类型的Element节点
+		//将TextNode节点加入到td类型的节点中
+		td_person.appendChild(person);
+		td_content.appendChild(content);	
+		//将td类型的节点添加到tr节点中
+		tr.appendChild(td_person);
+		tr.appendChild(td_content);	
+		tbody.appendChild(tr); //将tr节点加入tbody中
+		var tComment = document.getElementById("comment"); //获取table对象
+		tComment.appendChild(tbody); //将节点tbody加入节点尾部
+		form1.person.value="";	//清空评论人文本框
+		form1.content.value="";		//清空评论内容文本框
+
+	},
+	addAnswer() {
+		//创建TextNode节点
+		//var person = document.createTextNode(form1.person.value);
+		var person = document.createElement("img");
+		person.src="../static/answer.png"
+		console.log("in addanswer");
+            console.log(this.answers);
+		var content = document.createTextNode(this.answers);	
+		//创建td类型的Element节点
+		var td_person = document.createElement("td"); 
+		td_person.align="center"
+		td_person.height="27"
+		var td_content = document.createElement("td");	
+		var tr = document.createElement("tr"); //创建一个tr类型的Element节点
+		tr.bgcolor="#666666"
+		var tbody = document.createElement("tbody"); //创建一个tbody类型的Element节点
+		//将TextNode节点加入到td类型的节点中
+		td_person.appendChild(person);
+		td_content.appendChild(content);	
+		//将td类型的节点添加到tr节点中
+		tr.appendChild(td_person);
+		tr.appendChild(td_content);	
+		tbody.appendChild(tr); //将tr节点加入tbody中
+		var blank_tr=document.createElement("tr"); 
+		blank_tr.border="0" 
+		tbody.appendChild(blank_tr); 
+		var tComment = document.getElementById("comment"); //获取table对象
+		tComment.appendChild(tbody); //将节点tbody加入节点尾部
+
+	},
+	fnA(){
+		this.sygetanswer();
+		console.log(this.answers);
+		this.addAnswer();
+	},
+	answerQuestion() {
+		this.addQuestion();
+		this.sygetanswer();
+		setTimeout(this.fnA, 10000);
+            //console.log(this.answers);
+		//this.addAnswer();
+	}
+    }
+  })
+</script>
+</html>

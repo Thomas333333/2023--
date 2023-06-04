@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>详细答案</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/answer.css}"/>
+</head>
+<body>
+
+<div id="wrapper">
+    <div id="header"><h1>详细答案</h1></div>
+    <div id="nav">
+        <ul id="large-nav">
+            <li><a href="#qid">问题序号</a></li>
+            <ul class="sub-nav qid">
+                <li><a href="#qtype">Qtype</a></li>
+
+            </ul>
+            <li><a href="#q">问题</a></li>
+<!--            <ul class="sub-nav q">-->
+<!--                <li><a href="#qzh">qzh</a></li>-->
+<!--                <li><a href="#qen">qen</a></li>-->
+
+<!--            </ul>-->
+            <li><a th:href="(${isBing} ? '#a1' : '#a2')">
+                <span th:text="(${isBing} ? '网页链接' : '答案')"></span>
+            </a></li>
+<!--            <ul class="sub-nav a">-->
+
+<!--                <li><a href="#azh">Azh</a></li>-->
+<!--                <li><a href="#aen">Aen</a></li>-->
+
+<!--            </ul>-->
+            <li><a href="#aid">简介</a></li>
+            <ul class="sub-nav aid">
+                <li><a href="#atype">Atype</a></li>
+
+            </ul>
+        </ul>
+    </div>
+    <div id="content">
+        <h2 id="qid1"><a name="qid">问题序号</a></h2>
+        <p th:text="${id}"></p>
+<!--        <h3><a name="Qtype">Qtype</a></h3>-->
+<!--        <p th:text="'问题类型: '+${qdomain}"></p>-->
+
+
+        <h2 id="q1"><a name="q">问题</a></h2>
+        <p th:text="${question}"></p>
+<!--        <h3><a name="Qzh">Qzh</a></h3>-->
+<!--        <p th:text="'问题中文:  '+${qzh}"></p>-->
+
+<!--        <h3><a name="Qen">Qen</a></h3>-->
+<!--        <p th:text="'问题英文:  '+${qen}"></p>-->
+
+
+        <span th:if="${isBing}">
+            <h2 id="a1"><a name="a">网页链接</a></h2>
+            <a th:href="${answer}" target="_blank" th:text=" ${answer}"></a>
+      </span>
+
+        <span th:unless="${isBing}">
+            <h2 id="a2"><a name="a">标准回答</a></h2>
+            <p th:text=" ${answer}"></p>
+      </span>
+
+
+        <span th:if="${isBing}">
+<!--            <h2 id="a1"><a name="a">网页链接</a></h2>-->
+<!--            <a th:href="${answer}" target="_blank" th:text=" ${answer}"></a>-->
+      </span>
+
+        <span th:unless="${isBing}">
+            <h3><a name="Azh">所有答案</a></h3>
+            <ul>
+            <li th:each="answerinlist : ${all_answers}" th:text="${answerinlist}"></li>
+            </ul>
+      </span>
+
+
+
+<!--        <h3><a name="Aen">Aen</a></h3>-->
+<!--        <p th:text="'答案英文:  '+${aen}"></p>-->
+
+
+        <h2 id="aid1"><a name="aid">简介</a></h2>
+        <p th:text="${context}"></p>
+<!--        <h3><a name="Atype">Atype</a></h3>-->
+<!--        <p >答案类型:  </p>-->
+
+
+    </div>
+</div>
+
+ </body>
+
+ </html>

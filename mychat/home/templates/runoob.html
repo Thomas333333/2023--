@@ -1,0 +1,109 @@
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>机器问答</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <table width="800" height="70" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
+        <thead>
+            <tr>
+                <td width="14%" align="center" bgcolor="#FFFFFF"><img src="../static/paimon.png" width="80" height="74"></td>
+                <td width="86%" align="center" bgcolor="#FFFFFF"><h2>机器问答</h2></td>
+            </tr>
+        </thead>
+    </table>
+    <br>
+    <table width="800" border="1" align="center" cellpadding="0" cellspacing="0" bordercolor="#FFFFFF" bordercolorlight="#666666" bordercolordark="#FFFFFF" id="comment">
+        <tr>
+            <td width="14%" height="27" align="center" bgcolor="#E5BB93">人-机</td>
+            <td width="86%" align="center" bgcolor="#E5BB93">问答内容</td>
+        </tr>
+         {% for question, answer in chat_history %}
+
+        <tr >
+            <td>
+             <img src="../static/xhz.png" width="50" height="50" align="center">
+            </td>>
+            <td>{{ question }}</td>>
+
+
+        </tr>
+        <tr>
+            <td>
+             <img src="../static/gpt.jpeg" width="50" height="50" align="50">
+            </td>>
+            <td>{{ answer }}</td>>
+        </tr>
+         {% endfor %}
+
+    </table>
+    <form method="post" action="{% url 'getAnswer' %}">
+        <table width="800" height="122" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="100" height="14">&nbsp;</td>
+                <td width="700">&nbsp;</td>
+            </tr>
+            <tr>
+                <td >输入你的问题</td>
+                <td>
+                    <textarea name="content" cols="80" rows="6"></textarea>
+                </td>
+                <td>
+                    <button type="submit" width="20">提交</button>
+                    <button id="runoob-button" type="button" width="20">new chat</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <script>
+        $(document).ready(function() {
+            // Submit form using AJAX
+            $("#ajax-form").on("submit", function(event) {
+                event.preventDefault(); // prevent default form submission behavior
+                var questionText = $("#question-text").val();
+                if (!questionText) {
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'getAnswer' %}",
+                    data: {
+                        content: questionText,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success: function(response) {
+                        // Replace the current chat history with the received HTML content
+                        $("#comment").html(response);
+                        // Clear the textarea
+                        $("#question-text").val("");
+                    }
+                });
+            });
+
+
+$("#runoob-button").on("click", function(event) {
+    event.preventDefault();
+    console.log("Button clicked");
+    $.ajax({
+        type: "POST",
+        url: "{% url 'clearHistory' %}",
+        data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        success: function() {
+            console.log("Button clicked");
+            window.location.href = "http://localhost:8000/runoob";
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            alert("Something went wrong. Please try again later.");
+        }
+       });
+    });
+});
+
+    </script>
+</body>
